@@ -1,0 +1,93 @@
+/*
+ * MVC example of GTKmm program
+ *
+ * View class.  Is responsible for buttons (that user clicks) and for displaying
+ * the top card of the deck.
+ *
+ *  Created by Jo Atlee on 06/07/09.
+ *  Copyright 2009 UW. All rights reserved.
+ *
+ */
+
+
+#ifndef MVC_VIEW_H
+#define MVC_VIEW_H
+
+#include <gtkmm.h>
+#include "DeckGUI.h"
+#include "observer.h"
+#include "Card.h"
+class Controller;
+class Game;
+
+
+class View : public Gtk::Window, public Observer {
+public:
+    View( Controller*, Game* );
+	virtual ~View();
+	virtual void update();	// Observer Pattern: concrete update() method
+
+private:
+	// Observer Pattern: to access Model accessors without having to downcast subject
+	Game *game_;
+	
+	// Strategy Pattern member (plus signal handlers)
+	Controller *controller_;
+
+	// Card Images
+	DeckGUI deck;
+
+	//game GUI
+	Gtk::VBox gameGUI;
+	
+    	//game controls
+	Gtk::HBox controlArea;
+    	Gtk::Button start_button;
+    	Gtk::Button end_button;
+	Gtk::Entry seedField;   //Text entry for seed value
+
+        //table
+	Gtk::Frame tableArea;
+	Gtk::VBox tableVBox;
+	Gtk::HBox clubHBox;
+	Gtk::HBox diamondHBox;
+	Gtk::HBox heartHBox;
+	Gtk::HBox spadeHBox;
+	Gtk::Image *tableCardPics[52];
+	
+        //player window
+	Gtk::HBox playerArea;
+	Gtk::Frame pArea[4];
+	Gtk::VBox pVBox[4];
+	Gtk::Button pButton[4];
+	Gtk::Label pPoints[4];
+	Gtk::Label pDiscards[4];
+
+        //player hand
+	Gtk::Frame handArea;
+	Gtk::HBox handHBox;
+	Gtk::Button handButtons[13];	
+	Gtk::Image *handPics[13];
+	
+	//history of actions
+	Gtk::HBox historyArea;
+	Gtk::Entry history;
+
+	// Signal handlers:
+	void startButtonClicked();
+	void endButtonClicked();
+	void PlayerButtonClicked(int);
+	void CardClicked(int);
+
+	//Updaters
+	void UpdateScores();
+	void UpdateDiscards();
+	void clearScoreandDiscard();
+	void UpdateHandPics(std::vector<Card*>);
+	void UpdateTablePics();
+	void UpdateHistory();
+	void resetHand(bool);
+
+}; // View
+
+#endif

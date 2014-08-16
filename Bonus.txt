@@ -1,0 +1,4 @@
+BONUS FEATURES
+
+1) At botttom of window, textual record of last players plays. 
+
